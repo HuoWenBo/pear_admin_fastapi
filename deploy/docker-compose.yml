@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./deploy/Dockerfile
+      target: prod
+    image: pear_admin_fastapi:${PEAR_ADMIN_FASTAPI_VERSION:-latest}
+    restart: always
+    env_file:
+    - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PEAR_ADMIN_FASTAPI_HOST: 0.0.0.0
+      PEAR_ADMIN_FASTAPI_DB_HOST: pear_admin_fastapi-db
+      PEAR_ADMIN_FASTAPI_DB_PORT: 3306
+      PEAR_ADMIN_FASTAPI_DB_USER: pear_admin_fastapi
+      PEAR_ADMIN_FASTAPI_DB_PASS: pear_admin_fastapi
+      PEAR_ADMIN_FASTAPI_DB_BASE: pear_admin_fastapi
+
+  db:
+    image: bitnami/mysql:8.0.30
+    hostname: pear_admin_fastapi-db
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: "pear_admin_fastapi"
+      MYSQL_ROOT_PASSWORD: "pear_admin_fastapi"
+      MYSQL_DATABASE: "pear_admin_fastapi"
+      MYSQL_AUTHENTICATION_PLUGIN: "mysql_native_password"
+    healthcheck:
+      test: mysqladmin ping -h localhost
+      interval: 10s
+      timeout: 5s
+      retries: 40
+    volumes:
+    - pear_admin_fastapi-db-data:/bitnami/mysql/data
+
+  migrator:
+    image: pear_admin_fastapi:${PEAR_ADMIN_FASTAPI_VERSION:-latest}
+    restart: "no"
+    command: alembic upgrade head
+    environment:
+      PEAR_ADMIN_FASTAPI_DB_HOST: pear_admin_fastapi-db
+      PEAR_ADMIN_FASTAPI_DB_PORT: 3306
+      PEAR_ADMIN_FASTAPI_DB_USER: pear_admin_fastapi
+      PEAR_ADMIN_FASTAPI_DB_PASS: pear_admin_fastapi
+      PEAR_ADMIN_FASTAPI_DB_BASE: pear_admin_fastapi
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+
+volumes:
+  pear_admin_fastapi-db-data:
+    name: pear_admin_fastapi-db-data
