@@ -2,15 +2,15 @@
 
 #### 介绍
 
-此项目是使用 `fastapi_template` 生成的.
+本项目是使用 `fastapi_template` 生成的.
 
 本项目将使用 `fastapi` 和 pear admin next(基于layui-vue) 开发一个完善的管理系统
 
 ## `Poetry` 包管理器
 
-这个项目使用 `poetry`. 这是一种现代依赖关系管理工具.
+本项目使用 `poetry`. 这是一种现代依赖关系管理工具.
 
-要运行项目, 请使用以下一组命令:
+要运行项目, 请使用以下命令:
 
 ```bash
 poetry install
@@ -21,7 +21,7 @@ poetry run python -m pear_admin_fastapi
 
 您可以在 `/api/docs` 中找到 `swagger` 的文档.
 
-你可以在这里阅读更多关于诗歌的信息：https://python-poetry.org/
+您可以在这里阅读更多关于诗歌的信息：https://python-poetry.org/
 
 ## `Docker` 容器部署
 
@@ -31,7 +31,7 @@ poetry run python -m pear_admin_fastapi
 docker-compose -f deploy/docker-compose.yml --project-directory . up --build
 ```
 
-如果你想在 `docker` 中使用 `autoreload` 进行开发, 请将 `-f deploy/docker-compose.dev.yml` 添加到你的 `docker` 命令中.
+如果您想在 `docker` 中使用 `autoreload` 进行开发, 请将 `-f deploy/docker-compose.dev.yml` 添加到您的 `docker` 命令中.
 
 例:
 
@@ -129,7 +129,7 @@ alembic upgrade "head"
 alembic downgrade <revision_id>
 
 # Revert everything.
- alembic downgrade base
+alembic downgrade base
 ```
 
 ### 生成迁移
